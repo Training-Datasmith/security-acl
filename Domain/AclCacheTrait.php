@@ -42,12 +42,17 @@ trait AclCacheTrait
         }
 
         $reflectionProperty = new \ReflectionProperty($acl, 'permissionGrantingStrategy');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($acl, $this->permissionGrantingStrategy);
-        $reflectionProperty->setAccessible(false);
-
         $aceAclProperty = new \ReflectionProperty(Entry::class, 'acl');
-        $aceAclProperty->setAccessible(true);
+        $aceClassFieldProperty = new \ReflectionProperty($acl, 'classFieldAces');
+        $aceObjectFieldProperty = new \ReflectionProperty($acl, 'objectFieldAces');
+
+        if (\PHP_VERSION_ID < 80100) {
+            $reflectionProperty->setAccessible(true);
+            $aceAclProperty->setAccessible(true);
+            $aceClassFieldProperty->setAccessible(true);
+            $aceObjectFieldProperty->setAccessible(true);
+        }
+        $reflectionProperty->setValue($acl, $this->permissionGrantingStrategy);
 
         foreach ($acl->getObjectAces() as $ace) {
             $aceAclProperty->setValue($ace, $acl);
@@ -56,25 +61,17 @@ trait AclCacheTrait
             $aceAclProperty->setValue($ace, $acl);
         }
 
-        $aceClassFieldProperty = new \ReflectionProperty($acl, 'classFieldAces');
-        $aceClassFieldProperty->setAccessible(true);
         foreach ($aceClassFieldProperty->getValue($acl) as $aces) {
             foreach ($aces as $ace) {
                 $aceAclProperty->setValue($ace, $acl);
             }
         }
-        $aceClassFieldProperty->setAccessible(false);
 
-        $aceObjectFieldProperty = new \ReflectionProperty($acl, 'objectFieldAces');
-        $aceObjectFieldProperty->setAccessible(true);
         foreach ($aceObjectFieldProperty->getValue($acl) as $aces) {
             foreach ($aces as $ace) {
                 $aceAclProperty->setValue($ace, $acl);
             }
         }
-        $aceObjectFieldProperty->setAccessible(false);
-
-        $aceAclProperty->setAccessible(false);
 
         return $acl;
     }
