@@ -16,17 +16,17 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.0'
+          php-version: '8.2'
           ini-values: "memory_limit=-1"
           coverage: none
 
       - name: Checkout target branch
-        uses: actions/checkout@v2
+        uses: actions/checkout@v5
         with:
           ref: ${{ github.base_ref }}
 
       - name: Checkout PR
-        uses: actions/checkout@v2
+        uses: actions/checkout@v5
 
       - name: Install dependencies
         run: |

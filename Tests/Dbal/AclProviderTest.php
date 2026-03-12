@@ -57,8 +57,8 @@ class AclProviderTest extends TestCase
             $this->assertInstanceOf(NotAllAclsFoundException::class, $e);
 
             $partialResult = $e->getPartialResult();
-            $this->assertTrue($partialResult->contains($oids[0]));
-            $this->assertFalse($partialResult->contains($oids[1]));
+            $this->assertTrue($partialResult->offsetExists($oids[0]));
+            $this->assertFalse($partialResult->offsetExists($oids[1]));
         }
     }
 
@@ -229,7 +229,9 @@ class AclProviderTest extends TestCase
     protected function getField($object, $field)
     {
         $reflection = new \ReflectionProperty($object, $field);
-        $reflection->setAccessible(true);
+        if (\PHP_VERSION_ID < 80100) {
+            $reflection->setAccessible(true);
+        }
 
         return $reflection->getValue($object);
     }

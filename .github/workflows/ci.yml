@@ -18,12 +18,12 @@ jobs:
                     - php: '7.4'
                       deps: lowest
                       deprecations: max[self]=0
-                    - php: '8.4'
+                    - php: '8.5'
                       deps: highest
 
         steps:
             - name: Checkout code
-              uses: actions/checkout@v2
+              uses: actions/checkout@v5
 
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
@@ -36,7 +36,7 @@ jobs:
               run: composer config minimum-stability dev
 
             - name: Composer install
-              uses: ramsey/composer-install@v1
+              uses: ramsey/composer-install@v3
               with:
                   dependency-versions: '${{ matrix.deps }}'
 
@@ -54,7 +54,7 @@ jobs:
 
         steps:
             - name: Checkout code
-              uses: actions/checkout@v2
+              uses: actions/checkout@v5
             - name: PHP-CS-Fixer
               uses: docker://oskarstark/php-cs-fixer-ga:3.11.0
               with:

@@ -120,7 +120,7 @@ class MutableAclProviderTest extends TestCase
 
         $propertyChanges = $this->getField($provider, 'propertyChanges');
         $this->assertCount(1, $propertyChanges);
-        $this->assertTrue($propertyChanges->contains($acl));
+        $this->assertTrue($propertyChanges->offsetExists($acl));
         $this->assertEquals([], $propertyChanges->offsetGet($acl));
 
         $listeners = $this->getField($acl, 'listeners');
@@ -135,7 +135,7 @@ class MutableAclProviderTest extends TestCase
 
         $propertyChanges = $this->getField($provider, 'propertyChanges');
         $this->assertCount(1, $propertyChanges);
-        $this->assertTrue($propertyChanges->contains($acl));
+        $this->assertTrue($propertyChanges->offsetExists($acl));
         $this->assertEquals([], $propertyChanges->offsetGet($acl));
 
         $listeners = $this->getField($acl, 'listeners');
@@ -163,8 +163,8 @@ class MutableAclProviderTest extends TestCase
 
         $acl = $provider->findAcl(new ObjectIdentity('1', 'foo'));
         $this->assertCount(2, $propertyChanges);
-        $this->assertTrue($propertyChanges->contains($acl));
-        $this->assertTrue($propertyChanges->contains($acl->getParentAcl()));
+        $this->assertTrue($propertyChanges->offsetExists($acl));
+        $this->assertTrue($propertyChanges->offsetExists($acl->getParentAcl()));
     }
 
     public function testPropertyChangedDoesNotTrackUnmanagedAcls()
@@ -208,7 +208,7 @@ class MutableAclProviderTest extends TestCase
         $changes = $propertyChanges->offsetGet($acl);
         $this->assertTrue(isset($changes['aces']));
         $this->assertInstanceOf('\SplObjectStorage', $changes['aces']);
-        $this->assertTrue($changes['aces']->contains($ace));
+        $this->assertTrue($changes['aces']->offsetExists($ace));
         $aceChanges = $changes['aces']->offsetGet($ace);
         $this->assertTrue(isset($aceChanges['mask']));
         $this->assertEquals(1, $aceChanges['mask'][0]);
@@ -218,7 +218,7 @@ class MutableAclProviderTest extends TestCase
         $changes = $propertyChanges->offsetGet($acl);
         $this->assertTrue(isset($changes['aces']));
         $this->assertInstanceOf('\SplObjectStorage', $changes['aces']);
-        $this->assertTrue($changes['aces']->contains($ace));
+        $this->assertTrue($changes['aces']->offsetExists($ace));
         $aceChanges = $changes['aces']->offsetGet($ace);
         $this->assertTrue(isset($aceChanges['mask']));
         $this->assertTrue(isset($aceChanges['strategy']));
@@ -235,8 +235,8 @@ class MutableAclProviderTest extends TestCase
         $provider->propertyChanged($ace, 'strategy', 'any', 'all');
         $changes = $propertyChanges->offsetGet($acl);
         $this->assertTrue(isset($changes['aces']));
-        $this->assertFalse($changes['aces']->contains($ace));
-        $this->assertTrue($changes['aces']->contains($ace2));
+        $this->assertFalse($changes['aces']->offsetExists($ace));
+        $this->assertTrue($changes['aces']->offsetExists($ace2));
 
         $provider->propertyChanged($ace2, 'mask', 3, 4);
         $provider->propertyChanged($ace2, 'mask', 4, 1);
@@ -513,7 +513,9 @@ class MutableAclProviderTest extends TestCase
     protected function callMethod($object, $method, array $args)
     {
         $method = new \ReflectionMethod($object, $method);
-        $method->setAccessible(true);
+        if (\PHP_VERSION_ID < 80100) {
+            $method->setAccessible(true);
+        }
 
         return $method->invokeArgs($object, $args);
     }
@@ -553,17 +555,11 @@ class MutableAclProviderTest extends TestCase
     protected function getField($object, $field)
     {
         $reflection = new \ReflectionProperty($object, $field);
-        $reflection->setAccessible(true);
+        if (\PHP_VERSION_ID < 80100) {
+            $reflection->setAccessible(true);
+        }
 
         return $reflection->getValue($object);
-    }
-
-    public function setField($object, $field, $value)
-    {
-        $reflection = new \ReflectionProperty($object, $field);
-        $reflection->setAccessible(true);
-        $reflection->setValue($object, $value);
-        $reflection->setAccessible(false);
     }
 
     protected function getOptions()
