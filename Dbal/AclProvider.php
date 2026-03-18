@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Symfony package.
  *
@@ -517,8 +519,8 @@ QUERY;
             // has the ACL been hydrated during this hydration cycle?
             if (isset($acls[$aclId])) {
                 $acl = $acls[$aclId];
-            // has the ACL been hydrated during any previous cycle, or was possibly loaded
-            // from cache?
+                // has the ACL been hydrated during any previous cycle, or was possibly loaded
+                // from cache?
             } elseif (isset($loadedAcls[$classType][$objectIdentifier])) {
                 $acl = $loadedAcls[$classType][$objectIdentifier];
 
@@ -533,7 +535,7 @@ QUERY;
                     $oidCache[$oidCacheKey] = $acl->getObjectIdentity();
                 }
                 $result->offsetSet($oidCache[$oidCacheKey], $acl);
-            // so, this hasn't been hydrated yet
+                // so, this hasn't been hydrated yet
             } else {
                 // create object identity if we haven't done so yet
                 $oidLookupKey = $objectIdentifier.$classType;

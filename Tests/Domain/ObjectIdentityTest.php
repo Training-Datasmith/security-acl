@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Symfony package.
  *
@@ -35,7 +37,7 @@ namespace Symfony\Component\Security\Acl\Tests\Domain
 
         public function testFromDomainObjectPrefersInterfaceOverGetId()
         {
-            $domainObject = new class() implements DomainObjectInterface {
+            $domainObject = new class () implements DomainObjectInterface {
                 public function getObjectIdentifier()
                 {
                     return 'getObjectIdentifier()';

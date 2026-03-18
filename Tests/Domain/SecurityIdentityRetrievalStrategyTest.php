@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Symfony package.
  *
@@ -181,7 +183,7 @@ class SecurityIdentityRetrievalStrategyTest extends TestCase
 
     private function getStrategy(array $roles, string $authenticationStatus): SecurityIdentityRetrievalStrategy
     {
-        $roleHierarchy = new class($roles) implements RoleHierarchyInterface {
+        $roleHierarchy = new class ($roles) implements RoleHierarchyInterface {
             private $roles;
 
             public function __construct(array $roles)

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Symfony package.
  *
@@ -109,8 +111,7 @@ class AclVoter implements VoterInterface
             if ($subject instanceof FieldVote) {
                 $field = $subject->getField();
                 $subject = $subject->getDomainObject();
-            }
-            else {
+            } else {
                 $field = null;
             }
 
