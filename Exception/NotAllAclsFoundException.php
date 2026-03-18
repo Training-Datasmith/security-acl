@@ -30,7 +30,7 @@ class NotAllAclsFoundException extends AclNotFoundException
     /**
      * @param \SplObjectStorage<ObjectIdentityInterface,AclInterface> $result
      */
-    public function setPartialResult(\SplObjectStorage $result)
+    public function setPartialResult(\SplObjectStorage $result): void
     {
         $this->partialResult = $result;
     }

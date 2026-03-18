@@ -66,8 +66,9 @@ class AclProvider implements AclProviderInterface
 
     /**
      * {@inheritdoc}
+     * @return \Symfony\Component\Security\Acl\Domain\ObjectIdentity[]
      */
-    public function findChildren(ObjectIdentityInterface $parentOid, $directChildrenOnly = false)
+    public function findChildren(ObjectIdentityInterface $parentOid, $directChildrenOnly = false): array
     {
         $sql = $this->getFindChildrenSql($parentOid, $directChildrenOnly);
 
@@ -82,7 +83,7 @@ class AclProvider implements AclProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function findAcl(ObjectIdentityInterface $oid, array $sids = [])
+    public function findAcl(ObjectIdentityInterface $oid, array $sids = []): \Symfony\Component\Security\Acl\Model\AclInterface
     {
         return $this->findAcls([$oid], $sids)->offsetGet($oid);
     }
@@ -117,10 +118,9 @@ class AclProvider implements AclProviderInterface
                     //        reached by the default implementation, since we do not
                     //        filter by SID
                     throw new \RuntimeException('This is not supported by the default implementation.');
-                } else {
-                    $result->offsetSet($oid, $acl);
-                    $aclFound = true;
                 }
+                $result->offsetSet($oid, $acl);
+                $aclFound = true;
             }
 
             // check if we can locate the ACL in the cache
@@ -175,9 +175,8 @@ class AclProvider implements AclProviderInterface
                         $partialResultException = new NotAllAclsFoundException('The provider could not find ACLs for all object identities.');
                         $partialResultException->setPartialResult($result);
                         throw $partialResultException;
-                    } else {
-                        throw $e;
                     }
+                    throw $e;
                 }
                 foreach ($loadedBatch as $loadedOid) {
                     $loadedAcl = $loadedBatch->offsetGet($loadedOid);
@@ -216,10 +215,8 @@ class AclProvider implements AclProviderInterface
     /**
      * Constructs the query used for looking up object identities and associated
      * ACEs, and security identities.
-     *
-     * @return string
      */
-    protected function getLookupSql(array $ancestorIds)
+    protected function getLookupSql(array $ancestorIds): string
     {
         // FIXME: add support for filtering by sids (right now we select all sids)
 
@@ -254,12 +251,10 @@ class AclProvider implements AclProviderInterface
             WHERE (o.id =
 SELECTCLAUSE;
 
-        $sql .= implode(' OR o.id = ', $ancestorIds).')';
-
-        return $sql;
+        return $sql . (implode(' OR o.id = ', $ancestorIds) . ')');
     }
 
-    protected function getAncestorLookupSql(array $batch)
+    protected function getAncestorLookupSql(array $batch): string
     {
         $sql = <<<SELECTCLAUSE
             SELECT a.ancestor_id
@@ -312,9 +307,7 @@ SELECTCLAUSE;
             }
         }
 
-        $sql .= ')';
-
-        return $sql;
+        return $sql . ')';
     }
 
     /**
@@ -322,10 +315,8 @@ SELECTCLAUSE;
      * object identities.
      *
      * @param bool $directChildrenOnly
-     *
-     * @return string
      */
-    protected function getFindChildrenSql(ObjectIdentityInterface $oid, $directChildrenOnly)
+    protected function getFindChildrenSql(ObjectIdentityInterface $oid, $directChildrenOnly): string
     {
         if (false === $directChildrenOnly) {
             $query = <<<FINDCHILDREN
@@ -352,10 +343,8 @@ FINDCHILDREN;
     /**
      * Constructs the SQL for retrieving the primary key of the given object
      * identity.
-     *
-     * @return string
      */
-    protected function getSelectObjectIdentityIdSql(ObjectIdentityInterface $oid)
+    protected function getSelectObjectIdentityIdSql(ObjectIdentityInterface $oid): string
     {
         $query = <<<QUERY
             SELECT o.id
@@ -386,7 +375,7 @@ QUERY;
     /**
      * This method is called when an ACL instance is retrieved from the cache.
      */
-    private function updateAceIdentityMap(AclInterface $acl)
+    private function updateAceIdentityMap(AclInterface $acl): void
     {
         foreach (['classAces', 'classFieldAces', 'objectAces', 'objectFieldAces'] as $property) {
             $reflection = new \ReflectionProperty($acl, $property);
@@ -410,10 +399,8 @@ QUERY;
     /**
      * Retrieves all the ids which need to be queried from the database
      * including the ids of parent ACLs.
-     *
-     * @return array
      */
-    private function getAncestorIds(array $batch)
+    private function getAncestorIds(array $batch): array
     {
         $sql = $this->getAncestorLookupSql($batch);
 
@@ -431,7 +418,7 @@ QUERY;
      * Does either overwrite the passed ACE, or saves it in the global identity
      * map to ensure every ACE only gets instantiated once.
      */
-    private function doUpdateAceIdentityMap(array &$aces)
+    private function doUpdateAceIdentityMap(array &$aces): void
     {
         foreach ($aces as $index => $ace) {
             if (isset($this->loadedAces[$ace->getId()])) {

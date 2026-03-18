@@ -34,7 +34,7 @@ class PermissionGrantingStrategy implements PermissionGrantingStrategyInterface
     /**
      * Sets the audit logger.
      */
-    public function setAuditLogger(AuditLoggerInterface $auditLogger)
+    public function setAuditLogger(AuditLoggerInterface $auditLogger): void
     {
         $this->auditLogger = $auditLogger;
     }
@@ -52,7 +52,7 @@ class PermissionGrantingStrategy implements PermissionGrantingStrategyInterface
                     throw new NoAceFoundException();
                 }
 
-                return $this->hasSufficientPermissions($acl, $aces, $masks, $sids, $administrativeMode);
+                return $this->hasSufficientPermissions($aces, $masks, $sids, $administrativeMode);
             } catch (NoAceFoundException $e) {
                 $aces = $acl->getClassAces();
 
@@ -60,7 +60,7 @@ class PermissionGrantingStrategy implements PermissionGrantingStrategyInterface
                     throw $e;
                 }
 
-                return $this->hasSufficientPermissions($acl, $aces, $masks, $sids, $administrativeMode);
+                return $this->hasSufficientPermissions($aces, $masks, $sids, $administrativeMode);
             }
         } catch (NoAceFoundException $e) {
             if ($acl->isEntriesInheriting() && null !== $parentAcl = $acl->getParentAcl()) {
@@ -83,14 +83,14 @@ class PermissionGrantingStrategy implements PermissionGrantingStrategyInterface
                     throw new NoAceFoundException();
                 }
 
-                return $this->hasSufficientPermissions($acl, $aces, $masks, $sids, $administrativeMode);
+                return $this->hasSufficientPermissions($aces, $masks, $sids, $administrativeMode);
             } catch (NoAceFoundException $e) {
                 $aces = $acl->getClassFieldAces($field);
                 if (!$aces) {
                     throw $e;
                 }
 
-                return $this->hasSufficientPermissions($acl, $aces, $masks, $sids, $administrativeMode);
+                return $this->hasSufficientPermissions($aces, $masks, $sids, $administrativeMode);
             }
         } catch (NoAceFoundException $e) {
             if ($acl->isEntriesInheriting() && null !== $parentAcl = $acl->getParentAcl()) {
@@ -131,7 +131,7 @@ class PermissionGrantingStrategy implements PermissionGrantingStrategyInterface
      *
      * @throws NoAceFoundException
      */
-    private function hasSufficientPermissions(AclInterface $acl, array $aces, array $masks, array $sids, $administrativeMode)
+    private function hasSufficientPermissions(array $aces, array $masks, array $sids, $administrativeMode): bool
     {
         $firstRejectedAce = null;
 
@@ -187,18 +187,19 @@ class PermissionGrantingStrategy implements PermissionGrantingStrategyInterface
      *
      * @param int $requiredMask
      *
-     * @return bool
      *
      * @throws \RuntimeException if the ACE strategy is not supported
      */
-    private function isAceApplicable($requiredMask, EntryInterface $ace)
+    private function isAceApplicable($requiredMask, EntryInterface $ace): bool
     {
         $strategy = $ace->getStrategy();
         if (self::ALL === $strategy) {
             return $requiredMask === ($ace->getMask() & $requiredMask);
-        } elseif (self::ANY === $strategy) {
+        }
+        if (self::ANY === $strategy) {
             return 0 !== ($ace->getMask() & $requiredMask);
-        } elseif (self::EQUAL === $strategy) {
+        }
+        if (self::EQUAL === $strategy) {
             return $requiredMask === $ace->getMask();
         }
 

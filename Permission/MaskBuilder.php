@@ -69,10 +69,8 @@ class MaskBuilder extends AbstractMaskBuilder
 
     /**
      * Returns a human-readable representation of the permission.
-     *
-     * @return string
      */
-    public function getPattern()
+    public function getPattern(): string
     {
         $pattern = self::ALL_OFF;
         $length = \strlen($pattern);
@@ -109,10 +107,12 @@ class MaskBuilder extends AbstractMaskBuilder
 
         $reflection = new \ReflectionClass(static::class);
         foreach ($reflection->getConstants() as $name => $cMask) {
-            if (0 !== strpos($name, 'MASK_') || $mask !== $cMask) {
+            if (0 !== strpos($name, 'MASK_')) {
                 continue;
             }
-
+            if ($mask !== $cMask) {
+                continue;
+            }
             if (!\defined($cName = 'static::CODE_'.substr($name, 5))) {
                 throw new \RuntimeException('There was no code defined for this mask.');
             }

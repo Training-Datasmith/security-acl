@@ -53,7 +53,7 @@ class DoctrineAclCache implements AclCacheInterface
     /**
      * {@inheritdoc}
      */
-    public function clearCache()
+    public function clearCache(): void
     {
         if ($this->cache instanceof CacheProvider) {
             $this->cache->deleteAll();
@@ -63,7 +63,7 @@ class DoctrineAclCache implements AclCacheInterface
     /**
      * {@inheritdoc}
      */
-    public function evictFromCacheById($aclId)
+    public function evictFromCacheById($aclId): void
     {
         $lookupKey = $this->getAliasKeyForIdentity($aclId);
         if (!$this->cache->contains($lookupKey)) {
@@ -81,7 +81,7 @@ class DoctrineAclCache implements AclCacheInterface
     /**
      * {@inheritdoc}
      */
-    public function evictFromCacheByIdentity(ObjectIdentityInterface $oid)
+    public function evictFromCacheByIdentity(ObjectIdentityInterface $oid): void
     {
         $key = $this->getDataKeyByIdentity($oid);
         if (!$this->cache->contains($key)) {
@@ -127,7 +127,7 @@ class DoctrineAclCache implements AclCacheInterface
     /**
      * {@inheritdoc}
      */
-    public function putInCache(AclInterface $acl)
+    public function putInCache(AclInterface $acl): void
     {
         if (null === $acl->getId()) {
             throw new \InvalidArgumentException('Transient ACLs cannot be cached.');

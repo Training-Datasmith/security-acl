@@ -27,7 +27,7 @@ abstract class AuditLogger implements AuditLoggerInterface
      *
      * @param bool $granted
      */
-    public function logIfNeeded($granted, EntryInterface $ace)
+    public function logIfNeeded($granted, EntryInterface $ace): void
     {
         if (!$ace instanceof AuditableEntryInterface) {
             return;

@@ -43,7 +43,7 @@ class SecurityIdentityRetrievalStrategy implements SecurityIdentityRetrievalStra
      *
      * @return RoleSecurityIdentity[]
      */
-    public function getSecurityIdentities(TokenInterface $token)
+    public function getSecurityIdentities(TokenInterface $token): array
     {
         $sids = [];
 
@@ -85,7 +85,7 @@ class SecurityIdentityRetrievalStrategy implements SecurityIdentityRetrievalStra
         return $this->authenticationTrustResolver->isAnonymous($token);
     }
 
-    private function addAnonymousRoles(array &$sids)
+    private function addAnonymousRoles(array &$sids): void
     {
         $sids[] = new RoleSecurityIdentity('IS_AUTHENTICATED_ANONYMOUSLY');
         if (\defined('\Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter::PUBLIC_ACCESS')) {

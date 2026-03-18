@@ -52,11 +52,10 @@ final class ObjectIdentity implements ObjectIdentityInterface
      *
      * @param object $domainObject
      *
-     * @return ObjectIdentity
      *
      * @throws InvalidDomainObjectException
      */
-    public static function fromDomainObject($domainObject)
+    public static function fromDomainObject($domainObject): self
     {
         if (!\is_object($domainObject)) {
             throw new InvalidDomainObjectException('$domainObject must be an object.');
@@ -65,7 +64,8 @@ final class ObjectIdentity implements ObjectIdentityInterface
         try {
             if ($domainObject instanceof DomainObjectInterface) {
                 return new self($domainObject->getObjectIdentifier(), ClassUtils::getRealClass($domainObject));
-            } elseif (method_exists($domainObject, 'getId')) {
+            }
+            if (method_exists($domainObject, 'getId')) {
                 return new self((string) $domainObject->getId(), ClassUtils::getRealClass($domainObject));
             }
         } catch (\InvalidArgumentException $e) {
@@ -94,7 +94,7 @@ final class ObjectIdentity implements ObjectIdentityInterface
     /**
      * {@inheritdoc}
      */
-    public function equals(ObjectIdentityInterface $identity)
+    public function equals(ObjectIdentityInterface $identity): bool
     {
         // comparing the identifier with === might lead to problems, so we
         // waive this restriction
@@ -104,10 +104,8 @@ final class ObjectIdentity implements ObjectIdentityInterface
 
     /**
      * Returns a textual representation of this object identity.
-     *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return sprintf('ObjectIdentity(%s, %s)', $this->identifier, $this->type);
     }

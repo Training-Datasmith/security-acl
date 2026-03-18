@@ -115,7 +115,7 @@ class Entry implements AuditableEntryInterface
      *
      * @param bool $boolean
      */
-    public function setAuditFailure($boolean)
+    public function setAuditFailure($boolean): void
     {
         $this->auditFailure = $boolean;
     }
@@ -128,7 +128,7 @@ class Entry implements AuditableEntryInterface
      *
      * @param bool $boolean
      */
-    public function setAuditSuccess($boolean)
+    public function setAuditSuccess($boolean): void
     {
         $this->auditSuccess = $boolean;
     }
@@ -141,7 +141,7 @@ class Entry implements AuditableEntryInterface
      *
      * @param int $mask
      */
-    public function setMask($mask)
+    public function setMask($mask): void
     {
         $this->mask = $mask;
     }
@@ -154,7 +154,7 @@ class Entry implements AuditableEntryInterface
      *
      * @param string $strategy
      */
-    public function setStrategy($strategy)
+    public function setStrategy($strategy): void
     {
         $this->strategy = $strategy;
     }
@@ -203,7 +203,7 @@ class Entry implements AuditableEntryInterface
      *
      * @param string $serialized
      */
-    public function unserialize($serialized)
+    public function unserialize($serialized): void
     {
         $this->__unserialize(\is_array($serialized) ? $serialized : unserialize($serialized));
     }

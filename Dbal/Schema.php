@@ -48,7 +48,7 @@ final class Schema extends BaseSchema
     /**
      * Merges ACL schema with the given schema.
      */
-    public function addToSchema(BaseSchema $schema)
+    public function addToSchema(BaseSchema $schema): void
     {
         foreach ($this->getTables() as $table) {
             $schema->_addTable($table);
@@ -62,7 +62,7 @@ final class Schema extends BaseSchema
     /**
      * Adds the class table to the schema.
      */
-    protected function addClassTable()
+    protected function addClassTable(): void
     {
         $table = $this->createTable($this->options['class_table_name']);
         $table->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
@@ -74,7 +74,7 @@ final class Schema extends BaseSchema
     /**
      * Adds the entry table to the schema.
      */
-    protected function addEntryTable()
+    protected function addEntryTable(): void
     {
         $table = $this->createTable($this->options['entry_table_name']);
 
@@ -102,7 +102,7 @@ final class Schema extends BaseSchema
     /**
      * Adds the object identity table to the schema.
      */
-    protected function addObjectIdentitiesTable()
+    protected function addObjectIdentitiesTable(): void
     {
         $table = $this->createTable($this->options['oid_table_name']);
 
@@ -122,7 +122,7 @@ final class Schema extends BaseSchema
     /**
      * Adds the object identity relation table to the schema.
      */
-    protected function addObjectIdentityAncestorsTable()
+    protected function addObjectIdentityAncestorsTable(): void
     {
         $table = $this->createTable($this->options['oid_ancestors_table_name']);
 
@@ -144,7 +144,7 @@ final class Schema extends BaseSchema
     /**
      * Adds the security identity table to the schema.
      */
-    protected function addSecurityIdentitiesTable()
+    protected function addSecurityIdentitiesTable(): void
     {
         $table = $this->createTable($this->options['sid_table_name']);
 

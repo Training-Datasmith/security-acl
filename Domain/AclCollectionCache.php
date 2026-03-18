@@ -44,7 +44,7 @@ class AclCollectionCache
      * @param mixed            $collection anything that can be passed to foreach()
      * @param TokenInterface[] $tokens     an array of TokenInterface implementations
      */
-    public function cache($collection, array $tokens = [])
+    public function cache($collection, array $tokens = []): void
     {
         $sids = [];
         foreach ($tokens as $token) {

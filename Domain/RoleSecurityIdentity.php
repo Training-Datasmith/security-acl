@@ -53,10 +53,8 @@ final class RoleSecurityIdentity implements SecurityIdentityInterface
      * Returns a textual representation of this security identity.
      *
      * This is solely used for debugging purposes, not to make an equality decision.
-     *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return sprintf('RoleSecurityIdentity(%s)', $this->role);
     }

@@ -49,10 +49,8 @@ final class UserSecurityIdentity implements SecurityIdentityInterface
 
     /**
      * Creates a user security identity from a UserInterface.
-     *
-     * @return UserSecurityIdentity
      */
-    public static function fromAccount(UserInterface $user)
+    public static function fromAccount(UserInterface $user): self
     {
         return new self(method_exists($user, 'getUserIdentifier') ? $user->getUserIdentifier() : $user->getUsername(), ClassUtils::getRealClass($user));
     }
@@ -110,10 +108,8 @@ final class UserSecurityIdentity implements SecurityIdentityInterface
      * A textual representation of this security identity.
      *
      * This is not used for equality comparison, but only for debugging.
-     *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return sprintf('UserSecurityIdentity(%s, %s)', $this->username, $this->class);
     }

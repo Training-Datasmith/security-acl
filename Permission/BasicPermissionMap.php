@@ -101,7 +101,7 @@ class BasicPermissionMap implements PermissionMapInterface, MaskBuilderRetrieval
     /**
      * {@inheritdoc}
      */
-    public function contains($permission)
+    public function contains($permission): bool
     {
         return isset($this->map[$permission]);
     }
@@ -109,7 +109,7 @@ class BasicPermissionMap implements PermissionMapInterface, MaskBuilderRetrieval
     /**
      * {@inheritdoc}
      */
-    public function getMaskBuilder()
+    public function getMaskBuilder(): \Symfony\Component\Security\Acl\Permission\MaskBuilder
     {
         return new MaskBuilder();
     }
