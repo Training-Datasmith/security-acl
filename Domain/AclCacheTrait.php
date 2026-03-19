@@ -31,7 +31,7 @@ trait AclCacheTrait
      */
     private function unserializeAcl(string $serialized): ?AclInterface
     {
-        $acl = unserialize($serialized);
+        $acl = unserialize($serialized, ['allowed_classes' => true]);
 
         if (null !== $parentId = $acl->getParentAcl()) {
             $parentAcl = $this->getFromCacheById($parentId);

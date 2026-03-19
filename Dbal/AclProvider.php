@@ -253,7 +253,7 @@ class AclProvider implements AclProviderInterface
             WHERE (o.id =
 SELECTCLAUSE;
 
-        return $sql . (implode(' OR o.id = ', $ancestorIds) . ')');
+        return $sql . (implode(' OR o.id = ', array_map('intval', $ancestorIds)) . ')');
     }
 
     protected function getAncestorLookupSql(array $batch): string
